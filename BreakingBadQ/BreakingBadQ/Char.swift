@@ -16,5 +16,6 @@ struct Char: Decodable{
     let images: [URL] // there is amethod to parse strings into urls
     let aliases: [String]
     let status: String
-    let portrayedBY: String
+    let portrayedBy: String
+    var death: Death? // in case the char is alive, nil by default, when init we will know its value
 }
