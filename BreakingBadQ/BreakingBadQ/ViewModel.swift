@@ -23,6 +23,7 @@ class ViewModel {
     
     var quote : Quote
     var character : Char
+    
     init () {
         let decoder = JSONDecoder()
         decoder.keyDecodingStrategy = .convertFromSnakeCase
@@ -34,5 +35,21 @@ class ViewModel {
         let characterData = try! Data(contentsOf: Bundle.main.url(forResource: "samplecharacter", withExtension: "json")!)
         character = try! decoder.decode(Char.self, from: characterData)
         // death data is decoded inside char model
+    }
+    
+    func getData(for show: String) async{
+        status = .fetching
+        
+        do {
+            quote = try await fetcher.fetchQuote(from: show)
+            
+            character = try await fetcher.fetchCharacter(quote.character)
+            
+            character.death = try await fetcher.fetchDeath(for: character.name)
+            
+            status = .success
+        } catch{
+            status = .failed(error: error)
+        }
     }
 }
