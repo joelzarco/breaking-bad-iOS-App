@@ -48,8 +48,23 @@ struct QuoteView: View {
                     }
                     .frame(width: geo.size.width/1.1, height: geo.size.height/1.8) // modifiers for the image
                     .clipShape(.rect(cornerRadius: 50))
-                }
-                .frame(width: geo.size.width) // to fit on physical screen
+                    
+                    
+                    
+                    Button{
+                        print("Quote pressed")
+                    } label: {
+                        Text("Get random Quote")
+                            .font(.title)
+                            .foregroundStyle(.white)
+                            .padding()
+                            .background(.breakingBadGreen.opacity(0.9))
+                            .clipShape(.rect(cornerRadius: 10))
+                            .shadow(color: .breakingBadYellow, radius: 2)
+                    }
+                    
+                } // VS
+                .frame(width: geo.size.width, height: geo.size.height) // to fit on physical screen
                 
             } // Zs
             .frame(width: geo.size.width, height: geo.size.height) // to center the bg image after been enlarged
