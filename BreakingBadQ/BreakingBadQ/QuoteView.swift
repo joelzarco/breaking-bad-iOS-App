@@ -19,13 +19,17 @@ struct QuoteView: View {
                     .frame(width: geo.size.width * 2.7, height: geo.size.height * 1.2) // to make it wider than screen size
                 
                 VStack{
+                    Spacer(minLength: 60)
+                    
                     Text("\(vm.quote.quote)") // maybe change last quote to text?
+                        .minimumScaleFactor(0.6) // To avoid cutting longer quotes make text smaller
                         .multilineTextAlignment(.center)
                         .foregroundStyle(.white)
                         .padding()
                         .background(.black.opacity(0.4))
                         .clipShape(.rect(cornerRadius: 25))
                         .padding(.horizontal)
+                    
                     
                     ZStack(alignment: .bottom){
                         AsyncImage(url: vm.character.images[0]){ image in
@@ -49,7 +53,7 @@ struct QuoteView: View {
                     .frame(width: geo.size.width/1.1, height: geo.size.height/1.8) // modifiers for the image
                     .clipShape(.rect(cornerRadius: 50))
                     
-                    
+                    Spacer()
                     
                     Button{
                         print("Quote pressed")
@@ -62,6 +66,8 @@ struct QuoteView: View {
                             .clipShape(.rect(cornerRadius: 10))
                             .shadow(color: .breakingBadYellow, radius: 2)
                     }
+                    
+                    Spacer(minLength: 100)
                     
                 } // VS
                 .frame(width: geo.size.width, height: geo.size.height) // to fit on physical screen
