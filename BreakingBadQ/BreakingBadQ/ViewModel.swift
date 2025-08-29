@@ -52,4 +52,5 @@ class ViewModel {
             status = .failed(error: error)
         }
     }
+    
 }
