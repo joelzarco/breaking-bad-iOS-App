@@ -10,6 +10,7 @@ import SwiftUI
 struct QuoteView: View {
     let vm = ViewModel()
     let show : String
+    @State var showCharaterinfo : Bool = false
     
     var body: some View {
         GeometryReader{geo in
@@ -61,6 +62,9 @@ struct QuoteView: View {
                             }
                             .frame(width: geo.size.width/1.1, height: geo.size.height/1.8) // modifiers for the image
                             .clipShape(.rect(cornerRadius: 50))
+                            .onTapGesture {
+                                showCharaterinfo.toggle()
+                            }
                             
                         case .failed(let error):
                             Text(error.localizedDescription)
@@ -81,9 +85,10 @@ struct QuoteView: View {
                             .font(.title)
                             .foregroundStyle(.white)
                             .padding()
-                            .background(.breakingBadGreen.opacity(0.9))
+                            .background(Color("\(show.replacingOccurrences(of: " ", with: ""))Button"))
                             .clipShape(.rect(cornerRadius: 10))
-                            .shadow(color: .breakingBadYellow, radius: 2)
+                            .shadow(color: Color("\(show.replacingOccurrences(of: " ", with: ""))Shadow"), radius: 2)
+                        // I don't like this method for getting the colors :(
                     }
                     
                     Spacer(minLength: 100)
@@ -95,6 +100,9 @@ struct QuoteView: View {
             .frame(width: geo.size.width, height: geo.size.height) // to center the bg image after been enlarged
         } // geo
         .ignoresSafeArea()
+        .sheet(isPresented: $showCharaterinfo) {
+            CharacterView(character: vm.character, show: show)
+        }
     }
 }
 
