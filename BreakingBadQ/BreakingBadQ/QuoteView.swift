@@ -19,44 +19,63 @@ struct QuoteView: View {
                     .frame(width: geo.size.width * 2.7, height: geo.size.height * 1.2) // to make it wider than screen size
                 
                 VStack{
-                    Spacer(minLength: 60)
-                    
-                    Text("\(vm.quote.quote)") // maybe change last quote to text?
-                        .minimumScaleFactor(0.6) // To avoid cutting longer quotes make text smaller
-                        .multilineTextAlignment(.center)
-                        .foregroundStyle(.white)
-                        .padding()
-                        .background(.black.opacity(0.4))
-                        .clipShape(.rect(cornerRadius: 25))
-                        .padding(.horizontal)
-                    
-                    
-                    ZStack(alignment: .bottom){
-                        AsyncImage(url: vm.character.images[0]){ image in
-                            image
-                                .resizable()
-                                .scaledToFill()
-                        } placeholder: {
-                            // image while it´s been downloaded
+                    VStack{ // Second VStack to keep the button in its place
+                        Spacer(minLength: 60)
+                        
+                        switch vm.status {
+                        case .notStarted:
+                            EmptyView()
+                            
+                        case .fetching:
                             ProgressView()
-                        }
-                        .frame(width: geo.size.width/1.1, height: geo.size.height/1.8)
+                            
+                        case .success:
+                            Text("\(vm.quote.quote)") // maybe change last quote to text?
+                                .minimumScaleFactor(0.6) // To avoid cutting longer quotes make text smaller
+                                .multilineTextAlignment(.center)
+                                .foregroundStyle(.white)
+                                .padding()
+                                .background(.black.opacity(0.4))
+                                .clipShape(.rect(cornerRadius: 25))
+                                .padding(.horizontal)
+                            
+                            
+                            ZStack(alignment: .bottom){
+                                AsyncImage(url: vm.character.images[0]){ image in
+                                    image
+                                        .resizable()
+                                        .scaledToFill()
+                                } placeholder: {
+                                    // image while it´s been downloaded
+                                    ProgressView()
+                                }
+                                .frame(width: geo.size.width/1.1, height: geo.size.height/1.8)
+                                
+                                Spacer()
+                                
+                                Text(vm.quote.character)
+                                    .foregroundStyle(.white)
+                                    .padding(10)
+                                    .frame(maxWidth: .infinity)
+                                    .background(.ultraThinMaterial)
+                            }
+                            .frame(width: geo.size.width/1.1, height: geo.size.height/1.8) // modifiers for the image
+                            .clipShape(.rect(cornerRadius: 50))
+                            
+                        case .failed(let error):
+                            Text(error.localizedDescription)
+                            
+                        } // switch
                         
                         Spacer()
-                        
-                        Text(vm.quote.character)
-                            .foregroundStyle(.white)
-                            .padding(10)
-                            .frame(maxWidth: .infinity)
-                            .background(.ultraThinMaterial)
                     }
-                    .frame(width: geo.size.width/1.1, height: geo.size.height/1.8) // modifiers for the image
-                    .clipShape(.rect(cornerRadius: 50))
-                    
-                    Spacer()
                     
                     Button{
                         print("Quote pressed")
+                        // we need to to run getData inside a task{}
+                        Task{
+                            await vm.getData(for: show)
+                        }
                     } label: {
                         Text("Get random Quote")
                             .font(.title)
