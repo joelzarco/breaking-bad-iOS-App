@@ -18,13 +18,18 @@ struct CharacterView: View {
                     .resizable()
                     .scaledToFit()
                 ScrollView{
-                    AsyncImage(url: character.images[0]){ image in
-                        image
-                            .resizable()
-                            .scaledToFill()
-                    } placeholder: {
-                        ProgressView()
+                    TabView{
+                        ForEach(character.images, id: \.self){ imageURL in
+                            AsyncImage(url: imageURL){ image in
+                                image
+                                    .resizable()
+                                    .scaledToFill()
+                            } placeholder: {
+                                ProgressView()
+                            }
+                        }
                     }
+                    .tabViewStyle(.page)
                     .frame(width: geo.size.width/1.2, height: geo.size.height/1.7)
                     .clipShape(.rect(cornerRadius: 25))
                     .padding(.top, 60)
