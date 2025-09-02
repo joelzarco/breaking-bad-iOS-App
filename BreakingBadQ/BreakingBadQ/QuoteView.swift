@@ -107,6 +107,6 @@ struct QuoteView: View {
 }
 
 #Preview {
-    QuoteView(show: "Breaking Bad")
+    QuoteView(show: Constants.bbName)
         .preferredColorScheme(.dark)
 }
